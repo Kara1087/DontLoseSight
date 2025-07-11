@@ -9,9 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("Mouvement")]
-    [SerializeField] private float moveSpeed = 5f;
+    [Header("Movement")]
+    [SerializeField] private float moveForce = 10f;
     [SerializeField] private float jumpForce = 7f;
+    [SerializeField] private float maxSpeed = 8f;
     [SerializeField] private float groundCheckRadius = 0.2f;
 
     private Rigidbody rb;
@@ -27,21 +28,32 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Ici, uniquement ce qui ne touche PAS la physique
         isGrounded = CheckGrounded();
     }
 
     private void FixedUpdate()
     {
-        // Déplacement horizontal
-        Vector3 move = new Vector3(input.MoveInput.x, 0f, input.MoveInput.y).normalized;
-        Vector3 velocity = new Vector3(move.x * moveSpeed, rb.linearVelocity.y, move.z * moveSpeed);
-        rb.linearVelocity = velocity;
+        Move();
+        Jump();
+    }
 
-        // Saut
+    private void Move()
+    {
+        Vector3 moveInput = new Vector3(input.MoveInput.x, 0f, input.MoveInput.y);
+        Vector3 force = moveInput.normalized * moveForce;
+
+        // Limite la vitesse max (sinon la boule accélère à l’infini)
+        if (rb.linearVelocity.magnitude < maxSpeed)
+        {
+            rb.AddForce(force, ForceMode.Force); // Force continue, réaliste
+        }
+    }
+
+    private void Jump()
+    {
         if (input.JumpPressed && isGrounded)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Saut direct
         }
     }
 
