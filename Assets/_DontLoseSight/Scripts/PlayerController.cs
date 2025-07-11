@@ -61,13 +61,4 @@ public class PlayerController : MonoBehaviour
         Vector3 origin = transform.position + Vector3.down * groundCheckOffset;
         return Physics.CheckSphere(origin, groundCheckRadius, groundLayer);
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-        }
-    }
 }
