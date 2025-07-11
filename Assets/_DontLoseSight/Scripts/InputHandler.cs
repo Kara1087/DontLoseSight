@@ -1,17 +1,20 @@
 using UnityEngine;
-using  UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
     public Vector2 MoveInput { get; private set; }
-    public bool JumpPressed { get; private set; }
-    public bool JumpReleased { get; private set; }
-    
-    private void LateUpdate()
+    private bool jumpPressed = false;
+
+    // Appelé une seule fois à la lecture
+    public bool ConsumeJumpPressed()
     {
-        // Reset every frames
-        JumpPressed = false;
-        JumpReleased = false;
+        if (jumpPressed)
+        {
+            jumpPressed = false;
+            return true;
+        }
+        return false;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -22,9 +25,8 @@ public class InputHandler : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed)
-            JumpPressed = true;
-
-        if (context.canceled)
-            JumpReleased = true;
+        {
+            jumpPressed = true;
+        }
     }
 }
