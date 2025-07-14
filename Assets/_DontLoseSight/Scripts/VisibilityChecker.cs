@@ -2,19 +2,41 @@ using UnityEngine;
 
 public class VisibilityChecker : MonoBehaviour
 {
-    SerializeField] private Transform target;
+    [Header("Target")]
+    [SerializeField] private Transform target;
+    [SerializeField] private float timeBeforeLose = 1f;
+    
+    private float outOfViewTimer = 0f;
+    private Camera mainCam;
+    
+    void Start()
+    {
+        mainCam = Camera.main;
+    }
 
+    
     void Update()
     {
-        Vector3 viewportPos = Camera.main.WorldToViewportPoint(target.position);
+        if (target == null || mainCam == null) return;
+        
+        Vector3 viewportPos = mainCam.WorldToViewportPoint(target.position);
+        
         bool isVisible = viewportPos.z > 0 &&
                          viewportPos.x > 0 && viewportPos.x < 1 &&
                          viewportPos.y > 0 && viewportPos.y < 1;
-
-        if (!isVisible)
+        
+        if (isVisible)
         {
-            Debug.Log("❌ Proie hors champ !");
-            // Ici tu pourras appeler GameManager → GameOver()
+            outOfViewTimer = 0f;
+        }
+        else
+        {
+            outOfViewTimer += Time.deltaTime;
+
+            if (outOfViewTimer >= timeBeforeLose)
+            {
+                GameManager.Instance.GameOver();
+            }
         }
     }
 }

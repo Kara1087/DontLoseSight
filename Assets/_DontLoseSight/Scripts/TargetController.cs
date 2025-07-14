@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TargetController : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float directionChangeInterval = 2f;
     
@@ -21,7 +22,7 @@ public class TargetController : MonoBehaviour
             timer = 0f;
             ChooseNewDirection();
         }
-
+        // Mouvement en monde global
         transform.Translate(Time.deltaTime * moveSpeed * moveDirection, Space.World);
     }
 

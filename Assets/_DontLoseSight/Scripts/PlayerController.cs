@@ -4,11 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(InputHandler))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Références")]
+    [Header("References")]
     [SerializeField] private InputHandler input;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("Mouvement")]
+    [Header("Movement")]
     [SerializeField] private float moveForce = 10f;
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private float maxSpeed = 8f;
@@ -60,5 +60,13 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 origin = transform.position + Vector3.down * groundCheckOffset;
         return Physics.CheckSphere(origin, groundCheckRadius, groundLayer);
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Target"))
+        {
+            FindObjectOfType<GameManager>().Victory();
+        }
     }
 }
