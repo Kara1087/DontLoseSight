@@ -4,8 +4,8 @@ using Random = UnityEngine.Random;
 public class TargetController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float directionChangeInterval = 2f;
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float directionChangeInterval = 3f;
     [SerializeField] private InputHandler inputHandler;
     [SerializeField, Range(0f, 1f)] private float verticalInfluence = 0.3f; // 0.3 = amplitude verticale réduite
     
