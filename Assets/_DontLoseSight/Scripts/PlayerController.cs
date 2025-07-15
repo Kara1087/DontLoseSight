@@ -34,6 +34,13 @@ public class PlayerController : MonoBehaviour
     {
         // Flying mode = no gravity
         rb.useGravity = !isFlyingMode;
+        
+        // Cache le curseur
+        Cursor.visible = false;
+
+        // Verrouille le curseur au centre de la fenêtre
+        Cursor.lockState = CursorLockMode.Locked;
+        
     }
 
     private void Update()
