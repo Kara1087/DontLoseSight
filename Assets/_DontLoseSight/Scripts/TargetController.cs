@@ -12,6 +12,7 @@ public class TargetController : MonoBehaviour
     private Vector3 moveDirection;
     private float timer;
     private bool isActive;
+    public bool canMove = true;
     
     void Start()
     {
@@ -20,7 +21,7 @@ public class TargetController : MonoBehaviour
             inputHandler.OnFirstMove += ActivateMovement;
         }
         
-        ChooseNewDirection();
+        //ChooseNewDirection();
     }
     
     private void OnDestroy()
@@ -39,15 +40,16 @@ public class TargetController : MonoBehaviour
     void Update()
     {
         if (!isActive) return;
+        if (!canMove) return;
         
         timer += Time.deltaTime;
         if (timer >= directionChangeInterval)
         {
             timer = 0f;
-            ChooseNewDirection();
+            //ChooseNewDirection();
         }
         // Mouvement en monde global
-        transform.Translate(Time.deltaTime * moveSpeed * moveDirection, Space.World);
+        //transform.Translate(Time.deltaTime * moveSpeed * moveDirection, Space.World);
     }
 
     void ChooseNewDirection()

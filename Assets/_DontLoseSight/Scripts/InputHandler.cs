@@ -25,7 +25,6 @@ public class InputHandler : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveInput = context.ReadValue<Vector2>();
-        Debug.Log($"[InputHandler] MoveInput = {MoveInput}");
         if (!hasMovedOnce && MoveInput.magnitude > 0.1f)
         {
             hasMovedOnce = true;
@@ -36,7 +35,6 @@ public class InputHandler : MonoBehaviour
     public void OnVerticalMove(InputAction.CallbackContext context)
     {
         VerticalInput = context.ReadValue<float>();
-        Debug.Log($"[InputHandler] VerticalInput = {VerticalInput}");
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -44,7 +42,6 @@ public class InputHandler : MonoBehaviour
         if (context.performed)
         {
             jumpPressed = true;
-            Debug.Log("[InputHandler] Jump pressed!");
         }
     }
 }

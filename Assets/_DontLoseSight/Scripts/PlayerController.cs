@@ -20,11 +20,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckOffset = 0.52f;
     
     private Rigidbody rb;
+    private Animator animator;
     private bool isGrounded;
+    public bool canMove = true;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
 
         if (input == null)
             Debug.LogWarning("🎮 InputHandler non assigné !");
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!canMove) return;
+        
         if (!isFlyingMode)
         {
             isGrounded = CheckGrounded();
@@ -53,6 +58,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
+        
         if (isFlyingMode)
         {
             Fly();
@@ -102,16 +109,5 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 origin = transform.position + Vector3.down * groundCheckOffset;
         return Physics.CheckSphere(origin, groundCheckRadius, groundLayer);
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Target"))
-        {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.Victory();
-            }
-        }
     }
 }
