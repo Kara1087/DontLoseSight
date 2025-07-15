@@ -1,21 +1,45 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TargetController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float directionChangeInterval = 2f;
+    [SerializeField] private InputHandler inputHandler;
+    [SerializeField, Range(0f, 1f)] private float verticalInfluence = 0.3f; // 0.3 = amplitude verticale réduite
     
     private Vector3 moveDirection;
     private float timer;
+    private bool isActive;
     
     void Start()
     {
+        if (inputHandler != null)
+        {
+            inputHandler.OnFirstMove += ActivateMovement;
+        }
+        
         ChooseNewDirection();
+    }
+    
+    private void OnDestroy()
+    {
+        if (inputHandler != null)
+        {
+            inputHandler.OnFirstMove -= ActivateMovement;
+        }
+    }
+    
+    private void ActivateMovement()
+    {
+        isActive = true;
     }
 
     void Update()
     {
+        if (!isActive) return;
+        
         timer += Time.deltaTime;
         if (timer >= directionChangeInterval)
         {
@@ -28,7 +52,11 @@ public class TargetController : MonoBehaviour
 
     void ChooseNewDirection()
     {
-        float angle = Random.Range(0f, 360f);
-        moveDirection = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)).normalized;
+        // Choisit une direction aléatoire dans l’espace
+        moveDirection = Random.onUnitSphere;
+        
+        // Limite la montée/descente
+        moveDirection.y *= verticalInfluence; // Gérer amplitude verticale
+        moveDirection.Normalize(); // On renormalise pour garder une vitesse constante
     }
 }

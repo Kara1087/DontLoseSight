@@ -17,7 +17,7 @@ public class VisibilityChecker : MonoBehaviour
     
     void Update()
     {
-        if (target == null || mainCam == null) return;
+        if (!target || !mainCam) return;
         
         Vector3 viewportPos = mainCam.WorldToViewportPoint(target.position);
         

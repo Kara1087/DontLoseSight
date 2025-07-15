@@ -1,20 +1,24 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(InputHandler))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("References")]
+    [Header("General")]
     [SerializeField] private InputHandler input;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private bool isFlyingMode = true;
 
     [Header("Movement")]
     [SerializeField] private float moveForce = 10f;
-    [SerializeField] private float jumpForce = 7f;
     [SerializeField] private float maxSpeed = 8f;
+    
+    [Header("Jump (if grounded)")]
+    [SerializeField] private float jumpForce = 7f;
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float groundCheckOffset = 0.52f;
-
+    
     private Rigidbody rb;
     private bool isGrounded;
 
@@ -26,18 +30,49 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("🎮 InputHandler non assigné !");
     }
 
+    private void Start()
+    {
+        // Flying mode = no gravity
+        rb.useGravity = !isFlyingMode;
+    }
+
     private void Update()
     {
-        isGrounded = CheckGrounded();
+        if (!isFlyingMode)
+        {
+            isGrounded = CheckGrounded();
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
-        Jump();
+        if (isFlyingMode)
+        {
+            Fly();
+        }
+        else
+        {
+            MoveOnGround();
+            Jump();
+        }
     }
 
-    private void Move()
+    private void Fly()
+    {
+        // Déplacement horizontal via MoveInput
+        Vector3 moveInput = new Vector3(input.MoveInput.x, 0f, input.MoveInput.y);
+
+        // Ajoute la composante verticale
+        Vector3 moveDir = new Vector3(moveInput.x, input.VerticalInput, moveInput.z);
+
+        // Applique la force si sous vitesse max
+        if (rb.linearVelocity.magnitude < maxSpeed)
+        {
+            rb.AddForce(moveDir.normalized * moveForce, ForceMode.Force);
+        }
+    }
+
+    private void MoveOnGround()
     {
         Vector3 moveInput = new Vector3(input.MoveInput.x, 0f, input.MoveInput.y);
         Vector3 force = moveInput.normalized * moveForce;
@@ -66,7 +101,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Target"))
         {
-            FindObjectOfType<GameManager>().Victory();
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.Victory();
+            }
         }
     }
 }

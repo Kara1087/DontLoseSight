@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         Debug.Log("🎉 Victoire !");
         // TODO : UI / transition / score
+        RestartLevel();
     }
 
     public void GameOver()
@@ -30,9 +31,10 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         Debug.Log("💀 Perdu !");
         // TODO : UI / reset
+        RestartLevel();
     }
 
-    public void RestartLevel()
+    private void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
