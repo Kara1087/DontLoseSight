@@ -3,11 +3,17 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(InputHandler))]
+
 public class PlayerController : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] private InputHandler input;
     [SerializeField] private bool isFlyingMode = true;
+    
+    [Header("Visual")]
+    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private Transform model; // ton mesh enfant
+    [SerializeField] private float maxPitch = 30f; // inclinaison max
 
     [Header("Movement")]
     [SerializeField] private float moveForce = 10f;
@@ -69,6 +75,8 @@ public class PlayerController : MonoBehaviour
             MoveOnGround();
             Jump();
         }
+        
+        UpdateModelRotation();
     }
 
     private void Fly()
@@ -109,5 +117,40 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 origin = transform.position + Vector3.down * groundCheckOffset;
         return Physics.CheckSphere(origin, groundCheckRadius, groundLayer);
+    }
+
+    private void UpdateModelRotation()
+    {
+        Vector3 velocity = rb.linearVelocity;
+        if (velocity.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity.normalized, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        // On ne dessine les gizmos que si on a un Rigidbody
+        if (rb == null) return;
+
+        // Position de départ
+        Vector3 start = transform.position;
+
+        // Vitesse horizontale
+        Vector3 velocity = rb.linearVelocity;
+
+        // Couleur
+        Gizmos.color = Color.cyan;
+
+        // Dessine une flèche (une ligne simple pour commencer)
+        Gizmos.DrawLine(start, start + velocity);
+
+        // Dessine une petite sphère au bout
+        Gizmos.DrawSphere(start + velocity, 0.1f);
     }
 }

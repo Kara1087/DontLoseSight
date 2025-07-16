@@ -21,7 +21,7 @@ public class TargetController : MonoBehaviour
             inputHandler.OnFirstMove += ActivateMovement;
         }
         
-        //ChooseNewDirection();
+        ChooseNewDirection();
     }
     
     private void OnDestroy()
@@ -46,10 +46,10 @@ public class TargetController : MonoBehaviour
         if (timer >= directionChangeInterval)
         {
             timer = 0f;
-            //ChooseNewDirection();
+            ChooseNewDirection();
         }
         // Mouvement en monde global
-        //transform.Translate(Time.deltaTime * moveSpeed * moveDirection, Space.World);
+        transform.Translate(Time.deltaTime * moveSpeed * moveDirection, Space.World);
     }
 
     void ChooseNewDirection()
