@@ -1007,7 +1007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5aa885e45ec5409aab13aea1b431271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 0.2
   directionChangeInterval: 2
   inputHandler: {fileID: 1939764047}
   verticalInfluence: 0.3
@@ -1188,10 +1188,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4391959953467187138, guid: aae57071629844d7bab6d7034602c5dc, type: 3}
-      propertyPath: humanoidModel
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7325774874736440693, guid: aae57071629844d7bab6d7034602c5dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1232,6 +1228,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8182613139655694801, guid: aae57071629844d7bab6d7034602c5dc, type: 3}
+      propertyPath: targetController
+      value: 
+      objectReference: {fileID: 1622160966}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -3,16 +3,46 @@ using UnityEngine;
 
 public class PlayerGrab : MonoBehaviour
 {
-    private Animator animator;
+    [Header("References")]
+    [SerializeField] private PlayerModeManager modeManager;
+    
     public PlayerController playerController;
     public TargetController targetController;
     
+    private Animator animator;
     private bool isGrabbing = false;
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        if (modeManager == null)
+        {
+            modeManager = GetComponentInChildren<PlayerModeManager>();
+            if (modeManager == null)
+            {
+                Debug.LogError("❌ Aucun PlayerModeManager trouvé dans PlayerGrab !");
+            }
+        }
     }
+    
+    private void Start()
+    {
+        animator = modeManager.GetActiveAnimator();
+        // Mets à jour l'Animator quand on change de mode
+        modeManager.OnModeChanged += OnPlayerModeChanged;
+    }
+
+    private void OnDestroy()
+    {
+        // 👉 Désabonnement pour éviter des erreurs à la destruction
+        modeManager.OnModeChanged -= OnPlayerModeChanged;
+    }
+
+    private void OnPlayerModeChanged(PlayerMode newMode)
+    {
+        animator = modeManager.GetActiveAnimator();
+        Debug.Log("🔄 Animator mis à jour pour le mode : " + newMode);
+    }
+    
     
     private void OnTriggerEnter(Collider other)
     {
