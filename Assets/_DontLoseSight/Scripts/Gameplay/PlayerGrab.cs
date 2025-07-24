@@ -66,7 +66,15 @@ public class PlayerGrab : MonoBehaviour
     public void OnGrabAnimationEnd()
     {
         Debug.Log("✅ Animation Grab terminée à " + Time.time + "s");
-        Destroy(targetController.gameObject);
+        
+        if (targetController != null)
+        {
+            targetController.PlayGrabAnimationAndDestroy();
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Pas de TargetController trouvé pour l'animation !");
+        }
         
         if (GameManager.Instance != null)
         {
